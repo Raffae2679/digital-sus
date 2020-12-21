@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">{{ request.user.perfil_paciente.nome}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#textoNavbar"
+            aria-controls="textoNavbar" aria-expanded="false" aria-label="Alterna navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="textoNavbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home_paciente' %}">Página Inicial</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cartao-vacina' %}">Cartão de Vacinas</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="{% url 'agendavacina' %}">Agendar Vacina</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Outros
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'cadastrar-vacina-paciente' %}">Cadastrar Vacina</a>
+                    </div>
+                </li>
+            </ul>
+            <span class="navbar-text">
+                <a href="{% url 'deslogar' %}">Sair</a>
+            </span>
+        </div>
+    </nav>
+    <br>
+
+
+    <div style="margin-left: 10px;">
+        <h1>Vacinas Agendadas:</h1>
+        <a style="margin-left: 40px;" href="{% url 'agendavacina' %}">Agendar vacina</a>
+        <br><br>
+        <ul>
+            {% for i in agendamentos %}
+            {% if i.vacina_aplicada == False %}
+            <li>
+                {% if i.agendamento_stts %}
+                <a style="cursor: pointer;" data-toggle="modal" class="badge badge-success"
+                    data-target="#informacoes-{{i.pk}}">
+                    {% else %}
+                    <a style="cursor: pointer;" data-toggle="modal" class="badge badge-info"
+                        data-target="#informacoes-{{i.pk}}">
+                        {% endif %}
+                        Vacina: {{i.vacina}} <br>
+                        US: {{i.unidade_saude}} <br>
+                        {% if i.agendamento_stts%}
+                        Status: Vacina Agendada <br>
+                        Posição na Fila: {{i.pos_fila}}
+                        {% else %}
+                        Status: Aguardando Aprovação
+                        {% endif %}
+
+                    </a>
+            </li>
+            <br>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <hr>
+
+    <div style="margin-left: 10px;">
+    {% if vacinas %}
+    <h1>Últimas Vacinas Tomadas:</h1>
+    <br>
+    <ul>
+        {% for i in vacinas %}
+        <li>
+            Nome: {{i.nome}}<br>
+            Data de Aplicação: {{i.data_aplicacao}}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <!-- Botão para acionar modal -->
+
+    <!-- Modal -->
+    {% for i in agendamentos %}
+    <div class="modal fade" id="informacoes-{{i.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Informações do Agendamento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {% if i.agendamento_stts%}
+                    <p>Status: Vacina Agendada </p>
+                    <p>Posição na Fila: {{ i.pos_fila }}</p>
+                    {% else %}
+                    <p>Status: Aguardando Aprovação </p>
+                    {% endif %}
+                    <p>Vacina: {{i.vacina}}</p>
+                    <p>Unidade de Saúde: {{i.unidade_saude}}</p>
+                    <p>Endereco: {{i.unidade_saude.endereco}}, {{i.unidade_saude.cidade}}/{{i.unidade_saude.uf}}</p>
+                    <p>Data: {{i.data_agendada}}</p>
+                    <p>Turno: {{i.turno}}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

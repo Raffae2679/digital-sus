@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inical</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">{{ request.user.perfil_coordenador.nome}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#textoNavbar" aria-controls="textoNavbar" aria-expanded="false" aria-label="Alterna navegação">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="textoNavbar">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home_coordenador' %}">Página Inicial</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'cadastrarVacinaUS' %}">Vacinas</a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="{% url 'cadastrarProfissional' %}">Profissionais da Saúde</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="{% url 'cadastrarUS' %}">Unidade de Saúde</a>
+              </li>
+          </ul>
+          <span class="navbar-text">
+            <a href="{% url 'deslogar' %}">Sair</a>
+          </span>
+        </div>
+      </nav>
+      <br>
+      <div style="margin-left: 10px;">
+      <h1>Estabelecimentos de Saúde Cadastrados:</h1>
+      <a href="{% url 'cadastrarUS'%}">Cadastrar novo estabelecimento</a>
+      <br><br>
+      {% for ufs in ufs %}
+      <h3>{{ufs}}:</h3>
+      <ul>
+        {% for i in us %}
+        {% if i.uf == ufs %}
+        <li>{{i.nome}}<br>
+          <p><a href="{% url 'cadastrarVacinaUS' %}">Adicionar Vacina</a>  |  <a href="{% url 'relatorioUS' pk=i.pk%}">Relatório</a></p>
+          
+        </li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+
+      <br>
+      {% endfor %}
+
+<hr>
+
+<h1>Profissionais da Saúde Cadastrados:</h1>
+<a href="{% url 'cadastrarProfissional' %}">Cadastrar novo profissional</a>
+<br><br>
+
+{% for prof in profissional %}
+  <ul>
+    <li>
+      <a href="{% url 'vinculoprofissionalUS' pk=prof.pk %}" class="badge badge-info">
+      Nome: {{prof.nome}}<br><br>
+      Vinculo: {{prof.unidade_saude}}<br><br>
+    </a>
+    </li>
+  </ul>
+{% endfor %}
+
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Inicial</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">{{ request.user.perfil_profissional.unidade_saude.nome}}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#textoNavbar" aria-controls="textoNavbar" aria-expanded="false" aria-label="Alterna navegação">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="textoNavbar">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home_profissional' %}">Página Inicial<span class="sr-only">(Página atual)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'estoquevacinas' %}">Vacinas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'periodovacina' %}">Periodo de Vacinas</a>
+            </li>
+          </ul>
+          <span class="navbar-text">
+            <a href="{% url 'deslogar' %}">Sair</a>
+          </span>
+        </div>
+      </nav>
+      <br>
+    <h1>Solicitações de Agendamento</h1>
+    <ul>
+        {% for agen in agendamentos %}
+        {% if agen.agendamento_stts == False %}
+        <li>
+            <a href="{% url 'aprovaragendamento' pk=agen.pk %}" class="badge badge-info">
+                Vacina: {{agen.vacina.nome}}<br>
+                Paciente: {{agen.paciente.nome}}<br>
+                Data: {{agen.data_agendada}}<br>
+                Turno: {{agen.turno}}<br>
+            </a>
+        </li>
+       {% endif %}
+        {% endfor %}
+    </ul>
+
+    <br>
+    <br>
+
+    <h1>Vacinas Agendadas</h1>
+    <br>
+    {% for i in datas %}
+    <h3>{{ i }}</h3>
+    <br>
+    <ul>
+    {% for agen in diasAgendados %}
+    {% if agen.data_agendada == i and agen.vacina_aplicada == False and agen.agendamento_stts == True %}
+        <li>
+            <a href="{% url 'agendamentovacina' pk=agen.pk %}" class="badge badge-success">
+                Vacina: {{agen.vacina.nome}} <br>
+                Paciente: {{agen.paciente.nome}}<br>
+                Turno: {{agen.turno}}<br>
+                Posição Na Fila: {{agen.pos_fila}}<br>
+            </a>
+        </li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+    <br><br>
+    {% endfor %}
+    
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
