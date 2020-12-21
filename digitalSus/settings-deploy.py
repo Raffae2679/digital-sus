@@ -25,10 +25,10 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '-key9-5wc&9oom)!fszl(7(n1!zpj52^c9gj532!u@d#p&lni4'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == True
 
 ALLOWED_HOSTS = ['https://digital-sus.herokuapp.com']
 
@@ -137,15 +137,15 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfile')
 
 
 #Send_mail backend data
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_USE_TLS = True
-#EMAIL_HOST = 'smtp.gmail.com'
-#EMAIL_PORT = 587
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
 
-#EMAIL_HOST_USER = 'digital.sus2020@gmail.com'
-#EMAIL_HOST_PASSWORD = '************'
-DEFAULT_FROM_EMAIL = 'digital.sus2020@gmail.com'
+EMAIL_HOST_USER = os.environ.get('email')
+EMAIL_HOST_PASSWORD = os.environ.get('senha')
+DEFAULT_FROM_EMAIL = os.environ.get('email')
 
 django_heroku.settings(locals())
 
