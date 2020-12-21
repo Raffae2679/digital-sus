@@ -4,7 +4,7 @@ Sistema desenvolvido durante o processo seletivo para o Laboratório de Inovaç�
 
 ## 🔗 Site
 
-Clicando [aqui](https://digital-sus.herokuapp.com/login/) você consegue acessar o sistema que foi desenvolvido.
+Clicando [aqui](https://digital-sus.herokuapp.com/login/) você consegue acessar o sistema que foi desenvolvido. O deploy foi feito no heroku.
 
 ## Executando Localmente
 
